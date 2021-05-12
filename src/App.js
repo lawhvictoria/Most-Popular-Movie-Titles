@@ -1,25 +1,59 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import { withStyles } from "@material-ui/styles";
+import Filter from "./components/filter.component";
+import "./App.css";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
+
+const styles = {
+  root: {
+    paddingTop: "15px",
+    align: "center",
+    justifyContent:"center", 
+    alignItems:"center",
+    textAlign: "center"
+  },
+  gridContainer: {
+    align: "center",
+    justifyContent:"center", 
+    alignItems:"center",
+    textAlign: "center",
+  }
+};
+
+class App extends Component {
+  constructor(props) {
+      super(props);
+      this.state = {
+          filterStartDate: null,
+          filterEndDate: null
+      };
+  }
+
+  handleFilterDateChange = (dateType, date) => {
+    this.setState({ [dateType]: date });
+  }
+
+  render = () => {
+    const { classes } = this.props;
+
+    return(
+      <div className={classes.root}>
+        <Grid container spacing={3} className={classes.gridContainer}>
+          <Grid item xs={3}>
+            <Filter 
+              filterStartDate = {this.state.filterStartDate}
+              filterEndDate = {this.state.filterEndDate}
+              handleFilterDateChange = {this.handleFilterDateChange}
+            />
+          </Grid>
+          <Grid item xs={8}>
+          </Grid>
+        </Grid>
+      </div>
+    );
+  }
 }
 
-export default App;
+export default withStyles(styles)(App);
