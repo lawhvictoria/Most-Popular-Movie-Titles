@@ -19,6 +19,12 @@ const styles = {
         justifyContent:"center", 
         alignItems:"center",
         textAlign: "center"
+    },
+    endOfResults: {
+        textAlign: "center"
+    },
+    noSearchResults: {
+        textAlign: "center"
     }
 };
 
@@ -35,11 +41,12 @@ class App extends Component {
     }
 
     componentDidMount = () => {
-        this.getTopRatedMovies();
+        window.addEventListener('scroll', this.infiniteScroll);
+        this.getTopRatedMovies(this.state.page);
     }
 
-    getTopRatedMovies = () => {
-        const getRequestURL = "https://api.themoviedb.org/3/movie/top_rated?api_key=" + process.env.REACT_APP_API_KEY + "&language=en-US&page=" + this.state.page;
+    getTopRatedMovies = (page) => {
+        const getRequestURL = "https://api.themoviedb.org/3/movie/top_rated?api_key=" + process.env.REACT_APP_API_KEY + "&language=en-US&page=" + page;
             axios.get(getRequestURL)
                 .then(response => this.getListOfMovieIds(response.data));
     }
@@ -47,6 +54,9 @@ class App extends Component {
     getListOfMovieIds = (data) => {
         const filteredListOfMovies = this.getFilteredListOfMovies(data.results);
         const listOfMovieIds = this.state.listOfMovieIds.concat(filteredListOfMovies.map(movie => movie.id));
+        if (filteredListOfMovies.length < 2) {
+            this.getMoreMovieData();
+        }
         this.setState({ 
             listOfMovieIds: listOfMovieIds,
             maxNumOfPages: data.total_pages
@@ -54,16 +64,15 @@ class App extends Component {
     }
 
     getFilteredListOfMovies = (results) => {
-        console.log(results);
         let filteredListOfMovies = results;
         if (this.state.filterStartDate) {
             filteredListOfMovies = filteredListOfMovies.filter((movie) => {
-                return new Date(movie.release_date) > new Date(this.state.filterStartDate)
+                return new Date(movie.release_date) >= new Date(this.state.filterStartDate)
             });
         }
         if (this.state.filterEndDate) {
             filteredListOfMovies = filteredListOfMovies.filter((movie) => {
-                return new Date(movie.release_date) < new Date(this.state.filterEndDate)
+                return new Date(movie.release_date) <= new Date(this.state.filterEndDate)
             });
         }
         return filteredListOfMovies;
@@ -75,7 +84,28 @@ class App extends Component {
             listOfMovieIds: [],
             page: 1
         });
-        this.getTopRatedMovies();
+        this.getTopRatedMovies(1);
+    }
+
+    getMoreMovieData = () => {
+        const isSearchResultsOnLastPage = this.state.page >= this.state.maxNumOfPages;
+        if (!isSearchResultsOnLastPage) {
+            let newPage = this.state.page;
+            newPage++;
+            this.setState({
+                    page: newPage
+            });
+            this.getTopRatedMovies(newPage);
+        }
+        
+    }
+
+    infiniteScroll = () => {
+        const isTheDocumentAtTheBottom = window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight;
+        const isSearchResultsOnLastPage = this.state.page >= this.state.maxNumOfPages;
+        if (isTheDocumentAtTheBottom && !isSearchResultsOnLastPage) {
+            this.getMoreMovieData();
+        }
     }
 
     render = () => {
@@ -92,7 +122,7 @@ class App extends Component {
                 </Grid>
                 <Grid item xs={9}>
                     {
-                        this.state.listOfMovieIds && this.state.listOfMovieIds.length > 0 ? 
+                        this.state.listOfMovieIds && this.state.listOfMovieIds.length > 0 && this.state.page <= this.state.maxNumOfPages ? 
                             <List>
                                 {
                                     this.state.listOfMovieIds.map((movieId, index) => {
@@ -105,7 +135,13 @@ class App extends Component {
                                 }
                             </List>
                             :
-                            <Typography variant="h4" color="error">There are no search results found, please try again.</Typography>
+                            <Typography variant="h4" color="error" className={classes.noSearchResults}>There are no search results found, please try again.</Typography>
+                    }
+                    {
+                        this.state.page >= this.state.maxNumOfPages ?
+                            <Typography variant="h4" color="primary" className={classes.endOfResults}>You've reached the end of the search results.</Typography>
+                            :
+                            null
                     }
                 </Grid>
             </Grid>
