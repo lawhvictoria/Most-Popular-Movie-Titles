@@ -11,11 +11,6 @@ const styles = {
 };
 
 class Filter extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-        };
-    }
 
     handleStartDateChange = (date) => {
         this.props.handleFilterDateChange("filterStartDate", date);

@@ -47,13 +47,14 @@ class App extends Component {
 
     getTopRatedMovies = (page) => {
         const getRequestURL = "https://api.themoviedb.org/3/movie/top_rated?api_key=" + process.env.REACT_APP_API_KEY + "&language=en-US&page=" + page;
-            axios.get(getRequestURL)
-                .then(response => this.getListOfMovieIds(response.data));
+        axios.get(getRequestURL)
+            .then(response => this.getListOfMovieIds(response.data));
     }
 
     getListOfMovieIds = (data) => {
         const filteredListOfMovies = this.getFilteredListOfMovies(data.results);
-        const listOfMovieIds = this.state.listOfMovieIds.concat(filteredListOfMovies.map(movie => movie.id));
+        const filteredListOfMovieIds = filteredListOfMovies.map(movie => movie.id);
+        const listOfMovieIds = this.state.listOfMovieIds.concat(filteredListOfMovieIds);
         if (filteredListOfMovies.length < 2) {
             this.getMoreMovieData();
         }
@@ -97,7 +98,6 @@ class App extends Component {
             });
             this.getTopRatedMovies(newPage);
         }
-        
     }
 
     infiniteScroll = () => {
