@@ -13,7 +13,7 @@ const styles = {
     },
     container: {
         marginBottom: "10px",
-        border: "2px solid grey",
+        border: "3px solid grey",
         alignItems:"center"
     }
 };
