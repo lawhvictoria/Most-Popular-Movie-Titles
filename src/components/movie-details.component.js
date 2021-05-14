@@ -47,14 +47,12 @@ class MovieDetails extends Component {
     getCertificationRating = (movieId) => {
         const certificationURL = "https://api.themoviedb.org/3/movie/" + movieId + "/release_dates?api_key=" + process.env.REACT_APP_API_KEY;
         axios.get(certificationURL)
-            .then(response => this.proccessCertificationResponse(response.data.results));
+            .then(response => this.setCertificationRating(response.data.results));
     }
 
-    proccessCertificationResponse = (results) => {
+    setCertificationRating = (results) => {
         let certificationResult = "";
-        const unitedStatesCertification = results.find((countryOfRelease) => {
-            return countryOfRelease.iso_3166_1 === "US"
-        });
+        const unitedStatesCertification = results.find((countryOfRelease) => { return countryOfRelease.iso_3166_1 === "US" });
         if (unitedStatesCertification) {
             certificationResult = unitedStatesCertification.release_dates[0].certification;
         }
