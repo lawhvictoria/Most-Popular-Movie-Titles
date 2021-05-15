@@ -13,11 +13,25 @@ const styles = {
 class Filter extends Component {
 
     handleStartDateChange = (date) => {
-        this.props.handleFilterDateChange("filterStartDate", date);
+        if (date === null) {
+            this.props.handleFilterDateChange("filterStartDate", date);
+        } else {
+            const isDateValid = date && date.toString() !== "Invalid Date";
+            if (isDateValid) {
+                this.props.handleFilterDateChange("filterStartDate", date);
+            }
+        }
     }
 
     handleEndDateChange = (date) => {
-        this.props.handleFilterDateChange("filterEndDate", date);
+        if (date === null) {
+            this.props.handleFilterDateChange("filterEndDate", date);
+        } else {
+            const isDateValid = date.toString() !== "Invalid Date";
+            if (isDateValid) {
+                this.props.handleFilterDateChange("filterEndDate", date);
+            }
+        }
     }
 
     render() {
