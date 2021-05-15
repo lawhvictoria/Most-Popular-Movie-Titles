@@ -69,12 +69,12 @@ class App extends Component {
         let filteredListOfMovies = results;
         if (this.state.filterStartDate) {
             filteredListOfMovies = filteredListOfMovies.filter((movie) => {
-                return moment(movie.release_date).format('DD-MM-YYYY') >= moment(this.state.filterStartDate).format('DD-MM-YYYY');
+                return moment(movie.release_date) >= moment(this.state.filterStartDate);
             });
         }
         if (this.state.filterEndDate) {
             filteredListOfMovies = filteredListOfMovies.filter((movie) => {
-                return moment(movie.release_date).format('DD-MM-YYYY') <= moment(this.state.filterEndDate).format('DD-MM-YYYY');
+                return moment(movie.release_date) <= moment(this.state.filterEndDate);
             });
         }
         return filteredListOfMovies;
