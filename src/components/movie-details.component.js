@@ -82,7 +82,7 @@ class MovieDetails extends Component {
     convertMinsToHrsMins = (minutes) => {
         var hours = Math.floor(minutes / 60);
         var mins = minutes % 60;
-        return hours + " hour(s) " + mins + " minutes";
+        return hours + " hour " + mins + " minutes";
       }
     
     getGenreNames = (listOfGenres) => {
