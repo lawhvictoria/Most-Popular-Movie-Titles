@@ -65,9 +65,8 @@ class App extends Component {
     }
 
     getListOfMovieIds = (data) => {
-        console.log(data);
-        const filteredListOfMovieIds = data.results.map(movie => movie.id);
-        const listOfMovieIds = this.state.listOfMovieIds.concat(filteredListOfMovieIds);
+        const extractListOfMovieIds = data.results.map(movie => movie.id);
+        const listOfMovieIds = this.state.listOfMovieIds.concat(extractListOfMovieIds);
         this.setState({
             listOfMovieIds: listOfMovieIds,
             maxNumOfPages: data.total_pages

@@ -67,12 +67,11 @@ class MovieDetails extends Component {
 
     setMovieProperties = (data) => {
         this.getCertificationRating(data.id);
-        const convertedRuntime = this.convertMinsToHrsMins(data.runtime);
         const listOfGenres = this.getGenreNames(data.genres).join(", ");
         this.setState({
             title: data.original_title,
             releaseDate: data.release_date,
-            runtime: convertedRuntime,
+            runtime: data.runtime,
             voteAverage: data.vote_average,
             metascore: data.popularity,
             genres: listOfGenres
@@ -105,7 +104,7 @@ class MovieDetails extends Component {
                         <strong>{this.state.title}</strong> ({this.state.releaseDate})
                     </Typography>
                     <Typography variant="h6">
-                        {this.state.certification} | {this.state.runtime} | {this.state.genres}
+                        {this.state.certification} | {this.convertMinsToHrsMins(this.state.runtime)} | {this.state.genres}
                     </Typography>
                     <Typography variant="h6">
                         <strong>IMDB Rating:</strong> {this.state.voteAverage}/10 | <strong> Metascore:</strong> {this.state.metascore}
