@@ -40,7 +40,7 @@ class MovieDetails extends Component {
     }
 
     processAPIResponse = (response) => {
-        this.getPosterImage(response.data.poster_path);
+        this.setPosterImage(response.data.poster_path);
         this.setMovieProperties(response.data);
     }
 
@@ -60,7 +60,7 @@ class MovieDetails extends Component {
         this.setState({ certification: certification });
     }
 
-    getPosterImage = (posterPath) => {
+    setPosterImage = (posterPath) => {
         const posterURL = "https://image.tmdb.org/t/p/w500" + posterPath;
         this.setState({ posterPath: posterURL });
     }

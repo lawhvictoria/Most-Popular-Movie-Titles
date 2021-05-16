@@ -46,38 +46,32 @@ class App extends Component {
     }
 
     getTopRatedMovies = (page) => {
-        const getRequestURL = "https://api.themoviedb.org/3/movie/top_rated?api_key=" + process.env.REACT_APP_API_KEY + "&language=en-US&page=" + page;
+        const getRequestURL = this.createRequestURL(page);
         axios.get(getRequestURL)
             .then(response => this.getListOfMovieIds(response.data));
     }
 
-    getListOfMovieIds = (data) => {
-        const filteredListOfMovies = this.getFilteredListOfMovies(data.results);
-        const filteredListOfMovieIds = filteredListOfMovies.map(movie => movie.id);
-        const listOfMovieIds = this.state.listOfMovieIds.concat(filteredListOfMovieIds);
-        const areThereLessThan2MoviesThatFitReq = filteredListOfMovies.length < 10;
-        if (areThereLessThan2MoviesThatFitReq) {
-            this.getMoreMovieData();
+    createRequestURL = (page) => {
+        let baseURL = "https://api.themoviedb.org/3/movie/top_rated?api_key=" + process.env.REACT_APP_API_KEY + "&language=en-US&page=" + page;
+        if (this.state.filterStartDate !== null) {
+            const startDate = moment(this.state.filterStartDate).format('YYYY-MM-DD');
+            baseURL = baseURL + "&primary_release_date.gte=" + startDate;
         }
-        this.setState({ 
+        if (this.state.filterEndDate !== null) {
+            const endDate = moment(this.state.filterEndDate).format('YYYY-MM-DD');
+            baseURL = baseURL + "&primary_release_date.lte=" + endDate;
+        }
+        return baseURL;
+    }
+
+    getListOfMovieIds = (data) => {
+        console.log(data);
+        const filteredListOfMovieIds = data.results.map(movie => movie.id);
+        const listOfMovieIds = this.state.listOfMovieIds.concat(filteredListOfMovieIds);
+        this.setState({
             listOfMovieIds: listOfMovieIds,
             maxNumOfPages: data.total_pages
         });
-    }
-
-    getFilteredListOfMovies = (results) => {
-        let filteredListOfMovies = results;
-        if (this.state.filterStartDate !== null) {
-            filteredListOfMovies = filteredListOfMovies.filter((movie) => {
-                return moment(movie.release_date) >= moment(this.state.filterStartDate);
-            });
-        }
-        if (this.state.filterEndDate !== null) {
-            filteredListOfMovies = filteredListOfMovies.filter((movie) => {
-                return moment(movie.release_date) <= moment(this.state.filterEndDate);
-            });
-        }
-        return filteredListOfMovies;
     }
 
     handleFilterDateChange = (dateType, date) => {
@@ -85,8 +79,9 @@ class App extends Component {
             [dateType]: date,
             listOfMovieIds: [],
             page: 1
+        }, () => {
+            this.getTopRatedMovies(1);
         });
-        this.getTopRatedMovies(1);
     }
 
     getMoreMovieData = () => {
@@ -100,9 +95,9 @@ class App extends Component {
     }
 
     infiniteScroll = () => {
-        const isTheDocumentAtTheBottom = window.innerHeight + document.documentElement.scrollTop >= (document.documentElement.offsetHeight * 0.75);
+        const isTheDocumentAlmostToTheBottom = window.innerHeight + document.documentElement.scrollTop >= (document.documentElement.offsetHeight * 0.8);
         const isSearchResultsOnLastPage = this.state.page >= this.state.maxNumOfPages;
-        if (isTheDocumentAtTheBottom && !isSearchResultsOnLastPage) {
+        if (isTheDocumentAlmostToTheBottom && !isSearchResultsOnLastPage) {
             this.getMoreMovieData();
         }
     }
