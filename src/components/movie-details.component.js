@@ -3,6 +3,7 @@ import { withStyles } from "@material-ui/styles";
 import Grid from "@material-ui/core/Grid";
 import axios from "axios";
 import { Typography } from "@material-ui/core";
+import moment from 'moment'
 
 const styles = {
     posterImage: {
@@ -68,12 +69,14 @@ class MovieDetails extends Component {
     setMovieProperties = (data) => {
         this.getCertificationRating(data.id);
         const listOfGenres = this.getGenreNames(data.genres).join(", ");
+        const fixDateFormatting = moment(data.release_date).format("MM-DD-YYYY");
+        const roundMetascore = Math.round(data.popularity);
         this.setState({
             title: data.original_title,
-            releaseDate: data.release_date,
+            releaseDate: fixDateFormatting,
             runtime: data.runtime,
             voteAverage: data.vote_average,
-            metascore: data.popularity,
+            metascore: roundMetascore,
             genres: listOfGenres
         });
     }

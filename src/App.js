@@ -73,6 +73,14 @@ class App extends Component {
         });
     }
 
+    handleInvalidDateChange = () => {
+        this.setState({
+            listOfMovieIds: [],
+            maxNumOfPages: 0,
+            page: 1
+        });
+    }
+
     handleFilterDateChange = (dateType, date) => {
         this.setState({ 
             [dateType]: date,
@@ -111,6 +119,7 @@ class App extends Component {
                         filterStartDate = {this.state.filterStartDate}
                         filterEndDate = {this.state.filterEndDate}
                         handleFilterDateChange = {this.handleFilterDateChange}
+                        handleInvalidDateChange = {this.handleInvalidDateChange}
                     />
                 </Grid>
                 <Grid item xs={9} className={classes.movieList}>

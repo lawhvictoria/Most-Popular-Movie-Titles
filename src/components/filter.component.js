@@ -12,6 +12,8 @@ class Filter extends Component {
             const isDateValid = date && date.toString() !== "Invalid Date";
             if (isDateValid) {
                 this.props.handleFilterDateChange("filterStartDate", date);
+            } else {
+                this.props.handleInvalidDateChange();
             }
         }
     }
@@ -23,6 +25,8 @@ class Filter extends Component {
             const isDateValid = date && date.toString() !== "Invalid Date";
             if (isDateValid) {
                 this.props.handleFilterDateChange("filterEndDate", date);
+            } else {
+                this.props.handleInvalidDateChange();
             }
         }
     }
