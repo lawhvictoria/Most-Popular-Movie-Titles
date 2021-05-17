@@ -8,7 +8,9 @@ This repo contains the code for a single-page web application that will list the
 - Supports infinite scrolling for new results
 
 ## Available Scripts
-
+``` diff
+- Note: You need to have your own API Key to TMDB for this application to work. 
+```
 In the project directory, you can run:
 
 ### `npm run start`
