@@ -1,14 +1,7 @@
 import React, { Component } from "react";
-import { withStyles } from "@material-ui/styles";
 import Typography from '@material-ui/core/Typography';
-import {
-    MuiPickersUtilsProvider,
-    KeyboardDatePicker,
-} from '@material-ui/pickers';
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
-
-const styles = {
-};
 
 class Filter extends Component {
 
@@ -27,7 +20,7 @@ class Filter extends Component {
         if (date === null) {
             this.props.handleFilterDateChange("filterEndDate", date);
         } else {
-            const isDateValid = date.toString() !== "Invalid Date";
+            const isDateValid = date && date.toString() !== "Invalid Date";
             if (isDateValid) {
                 this.props.handleFilterDateChange("filterEndDate", date);
             }
@@ -48,7 +41,7 @@ class Filter extends Component {
                         variant="inline"
                         format="MM/dd/yyyy"
                         margin="normal"
-                        label={"Start Date"}
+                        label={"Start Date (mm/dd/yyyy)"}
                         value={this.props.filterStartDate}
                         onChange={this.handleStartDateChange}
                     />
@@ -63,7 +56,7 @@ class Filter extends Component {
                         variant="inline"
                         format="MM/dd/yyyy"
                         margin="normal"
-                        label={"End Date"}
+                        label={"End Date (mm/dd/yyyy)"}
                         value={this.props.filterEndDate}
                         onChange={this.handleEndDateChange}
                     />
@@ -74,4 +67,4 @@ class Filter extends Component {
     }
 }
 
-export default withStyles(styles)(Filter);
+export default Filter;
