@@ -69,11 +69,11 @@ class MovieDetails extends Component {
     setMovieProperties = (data) => {
         this.getCertificationRating(data.id);
         const listOfGenres = this.getGenreNames(data.genres).join(", ");
-        const fixDateFormatting = moment(data.release_date).format("MM-DD-YYYY");
+        const getReleaseYear = moment(data.release_date).format("YYYY");
         const roundMetascore = Math.round(data.popularity);
         this.setState({
             title: data.original_title,
-            releaseDate: fixDateFormatting,
+            releaseDate: getReleaseYear,
             runtime: data.runtime,
             voteAverage: data.vote_average,
             metascore: roundMetascore,
@@ -103,7 +103,7 @@ class MovieDetails extends Component {
                     />
                 </Grid>
                 <Grid item className={classes.movieDetails}>
-                    <Typography variant="h6">
+                    <Typography variant="h5">
                         <strong>{this.state.title}</strong> ({this.state.releaseDate})
                     </Typography>
                     <Typography variant="h6">
