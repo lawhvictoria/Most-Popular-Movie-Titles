@@ -5,7 +5,6 @@ import MovieDetails from "./components/movie-details.component";
 import "./App.css";
 import axios from "axios";
 import moment from 'moment'
-
 import Grid from "@material-ui/core/Grid";
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -17,9 +16,6 @@ const styles = {
         padding: "15px"
     },
     filter: {
-        align: "center",
-        justifyContent:"center", 
-        alignItems:"center",
         textAlign: "center"
     },
     movieList: {
@@ -48,7 +44,7 @@ class App extends Component {
     getTopRatedMovies = (page) => {
         const getRequestURL = this.createRequestURL(page);
         axios.get(getRequestURL)
-            .then(response => this.getListOfMovieIds(response.data));
+            .then(response => this.setListOfMovieIds(response.data));
     }
 
     createRequestURL = (page) => {
@@ -64,7 +60,7 @@ class App extends Component {
         return baseURL;
     }
 
-    getListOfMovieIds = (data) => {
+    setListOfMovieIds = (data) => {
         const extractListOfMovieIds = data.results.map(movie => movie.id);
         const listOfMovieIds = this.state.listOfMovieIds.concat(extractListOfMovieIds);
         this.setState({
