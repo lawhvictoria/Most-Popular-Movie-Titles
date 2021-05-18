@@ -1,0 +1,1 @@
+sudo ssh -i "most-popular-movies-1.pem" ec2-user@ec2-34-207-182-11.compute-1.amazonaws.com
